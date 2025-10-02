@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
+        {% if current_user.is_authenticated and current_user.role == 'HMC Admin' %}
+            <a href="{{ url_for('add_announcement') }}" class="btn btn-sm btn-outline-light float-end">Add Announcement</a>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-content">
+        <div class="announcement-section">
+            <h3><i class="fas fa-bullhorn me-2"></i>Latest Announcements</h3>
+            <div class="row g-4">
+                {% for announcement in announcements %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="announcement-card">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ announcement.title }}</h5>
+                                    <div class="meta-info">
+                                        <span><i class="fas fa-user me-1"></i>{{ announcement.author.username if announcement.author else 'Unknown' }}</span>
+                                        <span><i class="fas fa-calendar-alt me-1"></i>{{ announcement.date_posted.strftime('%Y-%m-%d') }}</span>
+                                    </div>
+                                    <p class="card-text mt-3">{{ announcement.content }}</p>
+                                    {% if current_user.is_authenticated and current_user.role == 'HMC Admin' %}
+                                        <a href="{{ url_for('edit_announcement', id=announcement.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <form method="POST" action="{{ url_for('delete_announcement', id=announcement.id) }}" style="display: inline-block;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="empty-state">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>No announcements at the moment.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(to right, #1a237e, #283593);
+        padding: 2rem;
+        margin: 0 0 2rem 0;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .container-md {
+        max-width: 1140px;
+        margin: 0 auto;
+    }
+
+    .dashboard-content {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .announcement-section h3 {
+        color: #1a237e;
+        margin-bottom: 1.5rem;
+    }
+
+    .announcement-card {
+        transition: all 0.3s ease;
+    }
+
+    .announcement-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .announcement-card .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    .meta-info {
+        font-size: 0.9rem;
+        color: #666;
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

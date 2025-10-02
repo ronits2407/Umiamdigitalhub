@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}My Complaints{% endblock %}
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1><i class="fas fa-clipboard-list me-2"></i>My Submitted Complaints</h1>
+            <a href="{{ url_for('submit_complaint') }}" class="btn btn-light">
+                <i class="fas fa-plus me-2"></i>Submit a New Complaint
+            </a>
+        </div>
+    </div>
+
+    <div class="complaints-section">
+        <div class="row g-4">
+            {% for complaint in complaints %}
+                <div class="col-12">
+                    <div class="complaint-card">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <strong><i class="fas fa-tag me-2"></i>{{ complaint.category }}</strong>
+                                <span class="badge rounded-pill 
+                                    {% if complaint.status == 'Pending' %}bg-warning{% endif %}
+                                    {% if complaint.status == 'In Progress' %}bg-info{% endif %}
+                                    {% if complaint.status == 'Resolved' %}bg-success{% endif %}
+                                    {% if complaint.status == 'Rejected' %}bg-danger{% endif %}">
+                                    <i class="fas fa-clock me-1"></i>{{ complaint.status }}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">{{ complaint.details }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                {{ complaint.submission_date.strftime('%Y-%m-%d %H:%M') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>You have not submitted any complaints yet.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(to right, #1a237e, #283593);
+        padding: 2rem;
+        margin: 0 0 2rem 0;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .complaint-card {
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .complaint-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .complaint-card .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    .card-header {
+        background: none;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        padding: 1rem;
+    }
+
+    .card-footer {
+        background: none;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        padding: 0.5rem 1rem;
+    }
+
+    .btn-light {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-light:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

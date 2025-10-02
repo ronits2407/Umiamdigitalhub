@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel{% endblock %}
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 text-white mb-2"><i class="fas fa-clipboard-list me-2"></i>All Complaints</h1>
+                <p class="lead text-white-50 mb-0">Manage and track student complaints</p>
+            </div>
+        </div>
+    </div>
+
+    {% for complaint in complaints %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    <strong>ID: {{ complaint.id }}</strong> | 
+                    Category: {{ complaint.category }} |
+                    By: {{ complaint.complainant.username if complaint.complainant else 'Anonymous' }}
+                </span>
+                <form method="POST" action="{{ url_for('update_complaint_status', id=complaint.id) }}" class="d-flex align-items-center gap-2">
+                    <select name="status" class="form-select form-select-sm status-select" data-complaint-id="{{ complaint.id }}" style="width: auto;">
+                        <option value="Submitted" {% if complaint.status == 'Submitted' %}selected{% endif %}>Submitted</option>
+                        <option value="Under Review" {% if complaint.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+                        <option value="In Progress" {% if complaint.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                        <option value="Resolved" {% if complaint.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                        <option value="Closed" {% if complaint.status == 'Closed' %}selected{% endif %}>Closed</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-primary update-btn">Update</button>
+                </form>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ complaint.details }}</p>
+            </div>
+            <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                <span>Submitted on: {{ complaint.submission_date.strftime('%Y-%m-%d %H:%M') }}</span>
+                <span class="status-badge status-{{ complaint.status.lower().replace(' ', '-') }}">{{ complaint.status }}</span>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No complaints have been submitted yet.</div>
+    {% endfor %}
+</div>
+
+<style>
+    .dashboard-header {
+        background-image: linear-gradient(to right, #1a237e, #283593),
+            url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        padding: 3rem;
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .status-badge {
+        padding: 0.3rem 1rem;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+
+    .status-submitted { background: #e3f2fd; color: #1565c0; }
+    .status-under-review { background: #fff3e0; color: #ef6c00; }
+    .status-in-progress { background: #e8f5e9; color: #2e7d32; }
+    .status-resolved { background: #f3e5f5; color: #7b1fa2; }
+    .status-closed { background: #eeeeee; color: #424242; }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    .status-select {
+        border-radius: 20px;
+        padding: 0.25rem 2rem 0.25rem 1rem;
+        background-position: right 0.75rem center;
+    }
+
+    .update-btn {
+        border-radius: 20px;
+        padding: 0.25rem 1rem;
+    }
+</style>
+{% endblock %}
+
+
+

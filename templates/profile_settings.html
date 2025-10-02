@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}Profile Settings{% endblock %}
+
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 text-white mb-2">
+                    <i class="fas fa-user-cog me-3"></i>Profile Settings
+                </h1>
+                <p class="lead text-white-50 mb-0">Manage your personal information and preferences</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card profile-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="profile-pic-wrapper mb-4">
+                        {% if current_user.profile_pic_url %}
+                            <img src="{{ current_user.profile_pic_url }}" 
+                                 class="rounded-circle profile-image"
+                                 alt="Profile Picture"
+                                 onerror="this.src='https://ui-avatars.com/api/?name={{ current_user.name|default(current_user.username, true) }}&background=random&color=fff&size=200'">
+                        {% else %}
+                            <img src="https://ui-avatars.com/api/?name={{ current_user.name|default(current_user.username, true) }}&background=random&color=fff&size=200" 
+                                 class="rounded-circle profile-image"
+                                 alt="Profile Picture">
+                        {% endif %}
+                    </div>
+                    <h4 class="mb-1">{{ current_user.name or current_user.username }}</h4>
+                    <p class="text-muted mb-3">{{ current_user.role }}</p>
+                    <div class="user-info">
+                        <div class="info-item">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            {{ current_user.Branch }} - Year {{ current_user.studying_year }}
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-door-open me-2"></i>
+                            Room {{ current_user.room_number }}
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-id-card me-2"></i>
+                            {{ current_user.roll_number }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-4">
+                            {{ form.name.label(class="form-label fw-bold") }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.roll_number.label(class="form-label fw-bold") }}
+                                {{ form.roll_number(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.room_number.label(class="form-label fw-bold") }}
+                                {{ form.room_number(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.studying_year.label(class="form-label fw-bold") }}
+                                {{ form.studying_year(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.Branch.label(class="form-label fw-bold") }}
+                                {{ form.Branch(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            {{ form.profile_pic_url.label(class="form-label fw-bold") }}
+                            {{ form.profile_pic_url(class="form-control") }}
+                        </div>
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-header {
+    background-image: linear-gradient(to right, #1a237e, #283593),
+        url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    padding: 3rem;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+}
+
+.profile-pic-wrapper {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.profile-card {
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    background: white;
+}
+
+.user-info {
+    text-align: left;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    margin-top: 1.5rem;
+}
+
+.info-item {
+    padding: 0.5rem 0;
+    color: #666;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    border-radius: 15px;
+}
+
+.form-control, .input-group-text {
+    border-radius: 10px;
+}
+
+.input-group > .form-control {
+    border-radius: 0 10px 10px 0;
+}
+
+.input-group > .input-group-text {
+    border-radius: 10px 0 0 10px;
+}
+
+.btn-primary {
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.row {
+    animation: fadeIn 0.5s ease-in;
+}
+</style>
+{% endblock %}

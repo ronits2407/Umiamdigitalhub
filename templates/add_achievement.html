@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Add Achievement{% endblock %}
+
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 text-white mb-2"><i class="fas fa-trophy me-2"></i>Add Achievement</h1>
+                <p class="lead text-white-50 mb-0">Share the success stories of our hostel</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-4">
+                        {{ form.title.label(class="form-label fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                            {{ form.title(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        {{ form.description.label(class="form-label fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                            {{ form.description(class="form-control", rows=5) }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            {{ form.year.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                {{ form.year(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.category.label(class="form-label fw-bold") }}
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                {{ form.category(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        {{ form.image_url.label(class="form-label fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-image"></i></span>
+                            {{ form.image_url(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background-image: linear-gradient(to right, #1a237e, #283593),
+            url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        padding: 3rem;
+        border-radius: 15px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .form-section {
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Add Announcement{% endblock %}
+
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-bullhorn me-2"></i>Add Announcement</h1>
+    </div>
+
+    <div class="complaint-form-section">
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST" action="" class="complaint-form">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-4">
+                        {{ form.title.label(class="form-label fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                            {{ form.title(class="form-control form-control-lg") }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        {{ form.content.label(class="form-label fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-comment-alt"></i></span>
+                            {{ form.content(class="form-control form-control-lg", rows=5) }}
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        {{ form.add(class="btn btn-primary btn-lg submit-btn") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(to right, #1a237e, #283593);
+        padding: 2rem;
+        margin: 0 0 2rem 0;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .complaint-form-section {
+        animation: fadeIn 0.5s ease-in;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+
+    .form-control, .form-select {
+        border-left: none;
+    }
+
+    .form-control:focus, .form-select:focus {
+        box-shadow: none;
+        border-color: #ced4da;
+    }
+
+    .submit-btn {
+        background: linear-gradient(to right, #4e73df, #224abe);
+        border: none;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Add Event{% endblock %}
+
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-calendar-plus me-2"></i>Add Event</h1>
+    </div>
+
+    <div class="form-section">
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-4">
+                        {{ form.title.label(class="form-label fw-bold") }}
+                        {{ form.title(class="form-control") }}
+                    </div>
+                    <div class="mb-4">
+                        {{ form.description.label(class="form-label fw-bold") }}
+                        {{ form.description(class="form-control", rows="5") }}
+                    </div>
+                    <div class="mb-4">
+                        {{ form.location.label(class="form-label fw-bold") }}
+                        {{ form.location(class="form-control") }}
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            {{ form.start_datetime.label(class="form-label fw-bold") }}
+                            {{ form.start_datetime(class="form-control") }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.end_datetime.label(class="form-label fw-bold") }}
+                            {{ form.end_datetime(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        {{ form.image_url.label(class="form-label fw-bold") }}
+                        {{ form.image_url(class="form-control") }}
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(to right, #1a237e, #283593);
+        padding: 2rem;
+        margin: 0 0 2rem 0;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .form-section {
+        max-width: 800px;
+        margin: 0 auto;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

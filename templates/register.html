@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container register-container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3 class="my-2"><i class="fas fa-user-plus me-2"></i>Create Account</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Basic Information -->
+                        <h5 class="mb-3">Basic Information</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.username.label(class="form-label") }}
+                                {{ form.username(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.email.label(class="form-label") }}
+                                {{ form.email(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <!-- Academic Information -->
+                        <h5 class="mb-3">Academic Information</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.roll_number.label(class="form-label") }}
+                                {{ form.roll_number(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.Branch.label(class="form-label") }}
+                                {{ form.Branch(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.studying_year.label(class="form-label") }}
+                                {{ form.studying_year(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <!-- Hostel Information -->
+                        <h5 class="mb-3">Hostel Information</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.room_number.label(class="form-label") }}
+                                {{ form.room_number(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.role.label(class="form-label") }}
+                                {{ form.role(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <h5 class="mb-3">Security</h5>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form.password.label(class="form-label") }}
+                                {{ form.password(class="form-control") }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.confirm_password.label(class="form-label") }}
+                                {{ form.confirm_password(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <!-- Verification Code (For Admin) -->
+                        <div class="verification-code-section mb-4" style="display: none;">
+                            {{ form.verification_code.label(class="form-label") }}
+                            {{ form.verification_code(class="form-control") }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .register-container {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    h5 {
+        color: #1a237e;
+        border-bottom: 2px solid #e3f2fd;
+        padding-bottom: 0.5rem;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.querySelector('select[name="role"]');
+    const verificationSection = document.querySelector('.verification-code-section');
+    
+    function toggleVerificationCode() {
+        verificationSection.style.display = 
+            roleSelect.value === 'HMC Admin' ? 'block' : 'none';
+    }
+    
+    roleSelect.addEventListener('change', toggleVerificationCode);
+    toggleVerificationCode(); // Initial check
+});
+</script>
+{% endblock %}

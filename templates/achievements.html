@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Hostel Achievements{% endblock %}
+{% block content %}
+<div class="container-md py-4">
+    <div class="dashboard-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1><i class="fas fa-trophy me-2"></i>Hostel Achievements</h1>
+            </div>
+            {% if current_user.is_authenticated and current_user.role == 'HMC Admin' %}
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ url_for('add_achievement') }}" class="btn btn-outline-light">
+                    <i class="fas fa-plus me-2"></i>Add Achievement
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="achievements-section">
+        <div class="row g-4">
+            {% for achievement in achievements %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="achievement-card">
+                        <div class="card h-100">
+                            {% if achievement.image_url %}
+                                <div class="card-img-wrapper">
+                                    <img src="{{ achievement.image_url }}" 
+                                         class="card-img-top achievement-img" 
+                                         alt="{{ achievement.title }}"
+                                         onerror="this.src='https://picsum.photos/800/400';this.onerror=null;">
+                                    <div class="img-overlay">
+                                        <span class="category-badge">
+                                            <i class="fas fa-star me-1"></i>{{ achievement.category }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <div class="year-badge mb-2">{{ achievement.year }}</div>
+                                <h5 class="card-title">{{ achievement.title }}</h5>
+                                <p class="card-text">{{ achievement.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="fas fa-award fa-3x mb-3"></i>
+                        <p>No achievements listed yet.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background: linear-gradient(to right, #1a237e, #283593);
+        padding: 2rem;
+        margin: 0 0 2rem 0;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .achievement-card {
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    .achievement-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .achievement-img {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card-img-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .img-overlay {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+    }
+
+    .category-badge {
+        background: rgba(26, 35, 126, 0.9);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .year-badge {
+        display: inline-block;
+        background: #f8f9fa;
+        padding: 0.3rem 1rem;
+        border-radius: 15px;
+        font-weight: bold;
+        color: #1a237e;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

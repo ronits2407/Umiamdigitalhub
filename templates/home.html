@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+{% block title %}Welcome to Tech Bull Hostel{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section mt-4">
+    <div class="container">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-white mb-4">Welcome to Umiam Hostel</h1>
+                <p class="lead text-white-50 mb-4">Your home away from home. Experience modern living with state-of-the-art facilities and a vibrant community.</p>
+                {% if not current_user.is_authenticated %}
+                    <div class="d-grid gap-2 d-md-flex">
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">Get Started</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4">Sign In</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <img src="https://picsum.photos/seed/hostel/600/400" class="img-fluid rounded-3 shadow-lg" alt="Hostel">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notice Board Section -->
+<div class="container my-5">
+    <div class="notice-board">
+        <div class="notice-header">
+            <i class="fas fa-bullhorn me-2"></i>Notice Board
+            {% if current_user.is_authenticated and current_user.role == 'HMC Admin' %}
+                <a href="{{ url_for('add_notice') }}" class="btn btn-sm btn-outline-light float-end">Add Notice</a>
+            {% endif %}
+        </div>
+        <div class="notice-wrapper">
+            <div class="notice-content" id="noticeContent">
+                {% if notices %}
+                    {% for notice in notices %}
+                        <div class="notice-item priority-{{ notice.priority.lower() }}">
+                            <span class="notice-badge">{{ notice.priority }}</span>
+                            {{ notice.message }}
+                            {% if loop.first %}
+                                <span class="new-tag">NEW</span>
+                            {% endif %}
+                            {% if current_user.is_authenticated and current_user.role == 'HMC Admin' %}
+                                <a href="{{ url_for('edit_notice', id=notice.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="notice-item">No current notices</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Links Section -->
+<div class="container my-5">
+    <div class="row g-4">
+        {% if current_user.is_authenticated %}
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper mb-3">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Submit Complaints</h3>
+                    <p>Easy complaint submission system for quick resolution of your concerns.</p>
+                    <a href="{{ url_for('submit_complaint') }}" class="btn btn-outline-primary">File Complaint</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper mb-3">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3>Announcements</h3>
+                    <p>Stay updated with the latest hostel news and important announcements.</p>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">View Updates</a>
+                </div>
+            </div>
+        {% endif %}
+        <div class="col-md-{{ '4' if current_user.is_authenticated else '6' }}">
+            <div class="feature-card">
+                <div class="icon-wrapper mb-3">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3>Facilities</h3>
+                <p>Explore our modern facilities designed for your comfort and convenience.</p>
+                <a href="{{ url_for('facilities') }}" class="btn btn-outline-primary">View Facilities</a>
+            </div>
+        </div>
+        <div class="col-md-{{ '4' if current_user.is_authenticated else '6' }}">
+            <div class="feature-card">
+                <div class="icon-wrapper mb-3">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>Our Achievements</h3>
+                <p>Discover our accomplishments and recognition in various fields.</p>
+                <a href="{{ url_for('achievements') }}" class="btn btn-outline-primary">View Achievements</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alternating Sections -->
+<div class="container my-5">
+    <!-- Facilities Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <img src="https://picsum.photos/seed/facility/600/400" class="img-fluid rounded-3 shadow" alt="Facilities">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="display-6 fw-bold mb-3">Modern Facilities</h2>
+            <p class="lead">Experience top-tier amenities including a fully equipped gym, study lounges, and recreation areas.</p>
+            <a href="{{ url_for('facilities') }}" class="btn btn-primary">Explore Facilities</a>
+        </div>
+    </div>
+
+    <!-- Achievements Section -->
+    <div class="row align-items-center mb-5 flex-lg-row-reverse">
+        <div class="col-lg-6">
+            <img src="https://picsum.photos/seed/achievement/600/400" class="img-fluid rounded-3 shadow" alt="Achievements">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="display-6 fw-bold mb-3">Our Achievements</h2>
+            <p class="lead">Discover our accomplishments and recognition in various fields.</p>
+            <a href="{{ url_for('achievements') }}" class="btn btn-primary">View Achievements</a>
+        </div>
+    </div>
+
+    <!-- Alumni Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <img src="https://picsum.photos/seed/alumni/600/400" class="img-fluid rounded-3 shadow" alt="Alumni">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="display-6 fw-bold mb-3">Alumni Network</h2>
+            <p class="lead">Connect with our distinguished alumni and explore their success stories.</p>
+            <a href="{{ url_for('alumni') }}" class="btn btn-primary">Meet Our Alumni</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.hero-section {
+    background: linear-gradient(to right, #1a237e, #283593);
+    padding: 2rem 0;
+    border-radius: 15px;
+    margin: 1.5rem auto;
+    max-width: 1140px;
+}
+
+.feature-card {
+    padding: 2rem;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #4e73df, #224abe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.icon-wrapper i {
+    font-size: 1.8rem;
+    color: white;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #4e73df, #224abe);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+}
+
+.btn-outline-light:hover {
+    transform: translateY(-2px);
+}
+
+img {
+    transition: all 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.02);
+}
+
+.notice-board {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.notice-header {
+    background: linear-gradient(to right, #1a237e, #283593);
+    color: white;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.notice-wrapper {
+    position: relative;
+    max-height: 200px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.notice-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.notice-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.notice-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.notice-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.notice-content {
+    padding: 0.5rem 0;
+}
+
+.notice-item {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notice-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notice-badge {
+    padding: 0.2rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.priority-normal .notice-badge {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.priority-important .notice-badge {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.priority-urgent .notice-badge {
+    background: #ffebee;
+    color: #c62828;
+    animation: blink 2s infinite;
+}
+
+.new-tag {
+    background: #ff4444;
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-left: auto;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+.notice-slider:hover {
+    animation-play-state: paused;
+}
+
+@media (max-width: 991.98px) {
+    .hero-section {
+        padding: 2rem 1rem;
+        margin: 1rem;
+    }
+    
+    .row.flex-lg-row-reverse {
+        margin-top: 3rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.querySelector('.notice-slider');
+    if (slider) {
+        slider.addEventListener('mouseenter', () => {
+            slider.style.animationPlayState = 'paused';
+        });
+        
+        slider.addEventListener('mouseleave', () => {
+            slider.style.animationPlayState = 'running';
+        });
+    }
+});
+</script>
+{% endblock %}
