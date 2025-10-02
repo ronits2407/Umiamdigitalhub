@@ -20,10 +20,11 @@
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <strong><i class="fas fa-tag me-2"></i>{{ complaint.category }}</strong>
                                 <span class="badge rounded-pill 
-                                    {% if complaint.status == 'Pending' %}bg-warning{% endif %}
-                                    {% if complaint.status == 'In Progress' %}bg-info{% endif %}
+                                    {% if complaint.status == 'Submitted' %}bg-info{% endif %}
+                                    {% if complaint.status == 'Under Review' %}bg-warning{% endif %}
+                                    {% if complaint.status == 'In Progress' %}bg-primary{% endif %}
                                     {% if complaint.status == 'Resolved' %}bg-success{% endif %}
-                                    {% if complaint.status == 'Rejected' %}bg-danger{% endif %}">
+                                    {% if complaint.status == 'Closed' %}bg-secondary{% endif %}">
                                     <i class="fas fa-clock me-1"></i>{{ complaint.status }}
                                 </span>
                             </div>
