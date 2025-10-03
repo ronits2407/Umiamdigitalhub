@@ -393,6 +393,27 @@ class EventForm(FlaskForm):
     image_url = StringField('Image URL')
     submit = SubmitField('Create Event')
 
+class AdminEditProfileForm(FlaskForm):
+    roll_number = StringField('Roll Number', validators=[DataRequired()])
+    room_number = StringField('Room Number', validators=[DataRequired()])
+    studying_year = SelectField('Year of Study', choices=[
+        ('1st Year', '1st Year'),
+        ('2nd Year', '2nd Year'),
+        ('3rd Year', '3rd Year'),
+        ('4th Year', '4th Year'),
+        ('Ph.D', 'Ph.D'),
+        ('M.Tech', 'M.Tech')
+    ], validators=[DataRequired()])
+    Branch = SelectField('Branch', choices=[
+        ('CSE', 'Computer Science'),
+        ('ECE', 'Electronics'),
+        ('ME', 'Mechanical'),
+        ('CE', 'Civil')
+    ], validators=[DataRequired()])
+    profile_pic_url = StringField('Profile Picture URL')
+    role = SelectField('Role', choices=[('Student', 'Student'), ('HMC Admin', 'HMC Admin')], validators=[DataRequired()])
+    submit = SubmitField('Update Profile')
+
 # --- Routes (MODIFIED to use render_template) ---
 @app.route('/')
 @app.route('/home')
@@ -705,6 +726,31 @@ def view_event_registrations(event_id):
     event = Event.query.get_or_404(event_id)
     registrations = EventRegistration.query.filter_by(event_id=event.id).all()
     return render_template('event_registrations.html', title='Event Registrations', event=event, registrations=registrations)
+
+@app.route('/admin/users')
+@login_required
+@admin_required
+def manage_users():
+    users = User.query.all()
+    return render_template('manage_users.html', title='Manage Users', users=users)
+
+@app.route('/admin/user/edit/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    form = AdminEditProfileForm(obj=user)
+    if form.validate_on_submit():
+        user.roll_number = form.roll_number.data
+        user.room_number = form.room_number.data
+        user.studying_year = form.studying_year.data
+        user.Branch = form.Branch.data
+        user.profile_pic_url = form.profile_pic_url.data
+        user.role = form.role.data
+        db.session.commit()
+        flash('User information has been updated!', 'success')
+        return redirect(url_for('manage_users'))
+    return render_template('edit_user.html', title='Edit User', form=form, user=user)
 
 # --- (All HTML Template strings have been removed from this file) ---
 

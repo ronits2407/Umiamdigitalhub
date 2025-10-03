@@ -24,22 +24,24 @@
 
         .navbar {
             background-image: linear-gradient(to right, #1a237e, #283593),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            padding: 0.75rem 1rem; /* Reduced padding */
         }
 
         .navbar-brand {
             font-weight: 600;
-            font-size: 1.5rem;
+            font-size: 1.3rem; /* Reduced font size */
             letter-spacing: 0.5px;
         }
         
         .nav-link {
             font-weight: 500;
-            padding: 0.5rem 1.2rem !important;
-            margin: 0 0.2rem;
+            padding: 0.5rem 0.75rem !important; /* Reduced padding */
+            margin: 0 0.1rem;
             border-radius: 4px;
             transition: all 0.3s ease;
+            font-size: 0.9rem; /* Reduced font size */
         }
         
         .nav-link:hover {
@@ -58,11 +60,11 @@
         
         @media (max-width: 991px) {
             .navbar-nav {
-                padding: 1rem 0;
+                padding: 0.5rem 0;
             }
             .nav-link {
-                padding: 0.7rem 1rem !important;
-                margin: 0.2rem 0;
+                padding: 0.5rem 1rem !important;
+                margin: 0.1rem 0;
             }
         }
         
@@ -96,8 +98,8 @@
         }
 
         .profile-pic {
-            width: 35px;
-            height: 35px;
+            width: 30px; /* Reduced size */
+            height: 30px; /* Reduced size */
             object-fit: cover;
             border: 2px solid rgba(255,255,255,0.2);
             transition: all 0.3s ease;
@@ -109,7 +111,7 @@
         }
 
         .profile-dropdown {
-            min-width: 280px;
+            min-width: 250px; /* Reduced width */
             border: none;
             border-radius: 15px;
             box-shadow: 0 5px 25px rgba(0,0,0,0.15);
@@ -121,7 +123,7 @@
 
         .navbar .container {
             position: relative;  /* Added this */
-            padding-right: 1rem;  /* Added this */
+            padding-right: 0.5rem;  /* Added this */
         }
 
         .nav-item.dropdown {
@@ -201,7 +203,8 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt me-1"></i>Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('my_complaints') }}"><i class="fas fa-clipboard-list me-1"></i>My Complaints</a></li>
                         {% if current_user.role == 'HMC Admin' %}
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_complaints') }}"><i class="fas fa-user-shield me-1"></i>Admin Panel</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_complaints') }}"><i class="fas fa-user-shield me-1"></i>Complaints Tracking</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('manage_users') }}"><i class="fas fa-users-cog me-1"></i>Manage Users</a></li>
                         {% endif %}
                         <li class="nav-item dropdown">
                             <a class="nav-link pe-0" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
