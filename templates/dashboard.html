@@ -119,10 +119,12 @@
                                 <span><i class="fas fa-calendar-alt me-1"></i>{{ announcement.date_posted.strftime('%Y-%m-%d') }}</span>
                             </div>
                             <p class="card-text mt-3">{{ announcement.content }}</p>
-                            <a href="{{ url_for('edit_announcement', id=announcement.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                            <form method="POST" action="{{ url_for('delete_announcement', id=announcement.id) }}" style="display: inline-block;">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
+                            {% if current_user.is_authenticated and current_user.role == 'HMC Admin' %}
+                                <a href="{{ url_for('edit_announcement', id=announcement.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <form method="POST" action="{{ url_for('delete_announcement', id=announcement.id) }}" style="display: inline-block;">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
