@@ -11,36 +11,67 @@
         </div>
     </div>
 
-    {% for complaint in complaints %}
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>ID: {{ complaint.id }}</strong> | 
-                    Category: {{ complaint.category }} |
-                    By: {{ complaint.complainant.username if complaint.complainant else 'Anonymous' }}
-                </span>
-                <form method="POST" action="{{ url_for('update_complaint_status', id=complaint.id) }}" class="d-flex align-items-center gap-2">
-                    <select name="status" class="form-select form-select-sm status-select" data-complaint-id="{{ complaint.id }}" style="width: auto;">
-                        <option value="Submitted" {% if complaint.status == 'Submitted' %}selected{% endif %}>Submitted</option>
-                        <option value="Under Review" {% if complaint.status == 'Under Review' %}selected{% endif %}>Under Review</option>
-                        <option value="In Progress" {% if complaint.status == 'In Progress' %}selected{% endif %}>In Progress</option>
-                        <option value="Resolved" {% if complaint.status == 'Resolved' %}selected{% endif %}>Resolved</option>
-                        <option value="Closed" {% if complaint.status == 'Closed' %}selected{% endif %}>Closed</option>
-                    </select>
-                    <button type="submit" class="btn btn-sm btn-primary update-btn">Update</button>
-                </form>
+    {% set categories = ['Maintenance', 'Mess/Food', 'Security', 'Internet', 'Other'] %}
+    {% for category in categories %}
+        {% set category_complaints = complaints|selectattr('category', 'equalto', category)|list %}
+        {% if category_complaints %}
+            <div class="category-section mb-4">
+                <h3 class="category-header">
+                    <i class="fas fa-folder me-2"></i>{{ category }}
+                    <span class="badge bg-primary">{{ category_complaints|length }}</span>
+                </h3>
+                {% for complaint in category_complaints %}
+                    <div class="card mb-3">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>
+                                <strong>ID: {{ complaint.id }}</strong> | 
+                                Category: {{ complaint.category }} |
+                                By: {{ complaint.complainant.username if complaint.complainant else 'Anonymous' }}
+                            </span>
+                            <form method="POST" action="{{ url_for('update_complaint_status', id=complaint.id) }}" class="d-flex align-items-center gap-2">
+                                <select name="status" class="form-select form-select-sm status-select" data-complaint-id="{{ complaint.id }}" style="width: auto;">
+                                    <option value="Submitted" {% if complaint.status == 'Submitted' %}selected{% endif %}>Submitted</option>
+                                    <option value="Under Review" {% if complaint.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+                                    <option value="In Progress" {% if complaint.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Resolved" {% if complaint.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                    <option value="Closed" {% if complaint.status == 'Closed' %}selected{% endif %}>Closed</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary update-btn">Update</button>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ complaint.details }}</p>
+                            {% if current_user.role == 'HMC Admin' %}
+                                <div class="admin-comments mt-3">
+                                    <form method="POST" action="{{ url_for('update_complaint_comment', id=complaint.id) }}">
+                                        <div class="comment-group">
+                                            <div class="comment-header">
+                                                <i class="fas fa-comment-dots me-2"></i>Admin Comments
+                                            </div>
+                                            <div class="comment-input-group">
+                                                <textarea name="comment" class="form-control" placeholder="Add internal notes here...">{{ complaint.comments or '' }}</textarea>
+                                                <button type="submit" class="btn btn-save">
+                                                    <i class="fas fa-save me-1"></i>Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                            <span>Submitted on: {{ complaint.submission_date.strftime('%Y-%m-%d %H:%M') }}</span>
+                            <span class="status-badge status-{{ complaint.status.lower().replace(' ', '-') }}">{{ complaint.status }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-            <div class="card-body">
-                <p class="card-text">{{ complaint.details }}</p>
-            </div>
-            <div class="card-footer text-muted d-flex justify-content-between align-items-center">
-                <span>Submitted on: {{ complaint.submission_date.strftime('%Y-%m-%d %H:%M') }}</span>
-                <span class="status-badge status-{{ complaint.status.lower().replace(' ', '-') }}">{{ complaint.status }}</span>
-            </div>
-        </div>
-    {% else %}
-        <div class="alert alert-info">No complaints have been submitted yet.</div>
+        {% endif %}
     {% endfor %}
+
+    {% if not complaints %}
+        <div class="alert alert-info">No complaints have been submitted yet.</div>
+    {% endif %}
 </div>
 
 <style>
@@ -82,6 +113,72 @@
     .update-btn {
         border-radius: 20px;
         padding: 0.25rem 1rem;
+    }
+
+    .admin-comments {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 0;
+        margin-top: 15px;
+    }
+
+    .comment-header {
+        background-color: #eef2ff;
+        color: #1a237e;
+        padding: 10px 15px;
+        border-radius: 10px 10px 0 0;
+        font-weight: 500;
+    }
+
+    .comment-input-group {
+        display: flex;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .comment-input-group textarea {
+        border: 1px solid #e3e6f0;
+        border-radius: 8px;
+        min-height: 80px;
+        resize: vertical;
+        font-size: 0.9rem;
+    }
+
+    .btn-save {
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        align-self: flex-start;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
+        color: white;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.4em 0.8em;
+        vertical-align: middle;
+    }
+
+    .category-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+
+    .category-header {
+        color: #1a237e;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e3e6f0;
     }
 </style>
 {% endblock %}

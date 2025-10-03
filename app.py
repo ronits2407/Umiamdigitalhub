@@ -66,6 +66,7 @@ class Complaint(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     complainant = db.relationship('User', backref='complaints') # Corrected relationship
     anonymous = db.Column(db.String(3), nullable=False, default='no')  # Add this line
+    comments = db.Column(db.Text, nullable=True)  # Add this line
 
 class Facility(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -777,6 +778,17 @@ def edit_user(user_id):
         flash('User information has been updated!', 'success')
         return redirect(url_for('manage_users'))
     return render_template('edit_user.html', title='Edit User', form=form, user=user)
+
+@app.route('/admin/complaint/comment/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def update_complaint_comment(id):
+    complaint = Complaint.query.get_or_404(id)
+    comment = request.form.get('comment')
+    complaint.comments = comment
+    db.session.commit()
+    flash('Comment has been updated!', 'success')
+    return redirect(url_for('admin_complaints'))
 
 # --- (All HTML Template strings have been removed from this file) ---
 
