@@ -20,10 +20,11 @@
                     </div>
                     <div class="mb-4">
                         {{ form.details.label(class="form-label fw-bold") }}
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-comment-alt"></i></span>
-                            {{ form.details(class="form-control form-control-lg", rows=5) }}
-                        </div>
+                        {{ form.details(class="form-control", rows=5) }}
+                    </div>
+                    <div class="mb-4">
+                        {{ form.anonymous.label(class="form-label fw-bold") }}
+                        {{ form.anonymous(class="form-select") }}
                     </div>
                     <div class="d-grid">
                         {{ form.submit(class="btn btn-primary btn-lg submit-btn") }}

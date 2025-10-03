@@ -65,6 +65,7 @@ class Complaint(db.Model):
     submission_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     complainant = db.relationship('User', backref='complaints') # Corrected relationship
+    anonymous = db.Column(db.String(3), nullable=False, default='no')  # Add this line
 
 class Facility(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -334,6 +335,10 @@ class LoginForm(FlaskForm):
 class ComplaintForm(FlaskForm):
     category = SelectField('Category', choices=[('Maintenance', 'Maintenance'), ('Mess/Food', 'Mess/Food'), ('Security', 'Security'), ('Internet', 'Internet'), ('Other', 'Other')], validators=[DataRequired()])
     details = TextAreaField('Details', validators=[DataRequired(), Length(min=10, max=500)])
+    anonymous = SelectField('Submit as', choices=[
+        ('no', 'Identify myself'), 
+        ('yes', 'Submit anonymously')
+    ], validators=[DataRequired()])
     submit = SubmitField('Submit Complaint')
 
 class AnnouncementForm(FlaskForm):
@@ -475,15 +480,36 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    announcements = Announcement.query.order_by(Announcement.date_posted.desc()).all()
-    return render_template('dashboard.html', title='Dashboard', announcements=announcements)
+    announcements = Announcement.query.order_by(Announcement.date_posted.desc()).limit(5).all()
+    total_students = User.query.filter_by(role='Student').count()
+    total_complaints = Complaint.query.count()
+    resolved_complaints = Complaint.query.filter_by(status='Resolved').count()
+    pending_complaints = total_complaints - resolved_complaints
+    total_events = Event.query.count()
+    total_facilities = Facility.query.count()
+    total_alumni = Alumni.query.count()
+
+    return render_template('dashboard.html', title='Dashboard',
+                           announcements=announcements,
+                           total_students=total_students,
+                           total_complaints=total_complaints,
+                           resolved_complaints=resolved_complaints,
+                           pending_complaints=pending_complaints,
+                           total_events=total_events,
+                           total_facilities=total_facilities,
+                           total_alumni=total_alumni)
 
 @app.route('/submit_complaint', methods=['GET', 'POST'])
 @login_required
 def submit_complaint():
     form = ComplaintForm()
     if form.validate_on_submit():
-        complaint = Complaint(category=form.category.data, details=form.details.data, complainant=current_user)
+        complaint = Complaint(
+            category=form.category.data, 
+            details=form.details.data, 
+            complainant=current_user if form.anonymous.data == 'no' else None,
+            anonymous=form.anonymous.data
+        )
         db.session.add(complaint)
         db.session.commit()
         flash('Your complaint has been submitted successfully!', 'success')
