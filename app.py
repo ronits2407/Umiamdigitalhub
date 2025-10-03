@@ -657,6 +657,33 @@ def delete_facility(id):
     flash('Facility has been deleted!', 'success')
     return redirect(url_for('facilities'))
 
+@app.route('/admin/achievement/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_achievement(id):
+    achievement = Achievement.query.get_or_404(id)
+    form = AchievementForm(obj=achievement)
+    if form.validate_on_submit():
+        achievement.title = form.title.data
+        achievement.description = form.description.data
+        achievement.year = form.year.data
+        achievement.category = form.category.data
+        achievement.image_url = form.image_url.data
+        db.session.commit()
+        flash('Achievement has been updated!', 'success')
+        return redirect(url_for('achievements'))
+    return render_template('edit_achievement.html', title='Edit Achievement', form=form, achievement=achievement)
+
+@app.route('/admin/achievement/delete/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_achievement(id):
+    achievement = Achievement.query.get_or_404(id)
+    db.session.delete(achievement)
+    db.session.commit()
+    flash('Achievement has been deleted!', 'success')
+    return redirect(url_for('achievements'))
+
 # --- (All HTML Template strings have been removed from this file) ---
 
 # --- Main Execution ---
