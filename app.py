@@ -123,168 +123,6 @@ class EventRegistration(db.Model):
     event = db.relationship('Event', backref='registrations')
     user = db.relationship('User', backref='event_registrations')
 
-def insert_sample_facilities():
-    sample_facilities = [
-        {
-            'name': 'Modern Gymnasium',
-            'description': 'Fully equipped gym with cardio machines, weight training equipment, and dedicated workout areas.',
-            'location': 'Ground Floor, Block A',
-            'availability': '5:00 AM - 10:00 PM',
-            'image_url': f'https://picsum.photos/seed/gym{1}/800/400'
-        },
-        {
-            'name': 'Study Lounge',
-            'description': 'Quiet study space with individual desks, high-speed Wi-Fi, and charging stations.',
-            'location': 'First Floor, Block B',
-            'availability': '24/7',
-            'image_url': f'https://picsum.photos/seed/study{2}/800/400'
-        },
-        {
-            'name': 'Recreation Room',
-            'description': 'Entertainment zone with pool table, table tennis, and gaming consoles.',
-            'location': 'Second Floor, Block A',
-            'availability': '9:00 AM - 11:00 PM',
-            'image_url': f'https://picsum.photos/seed/recreation{3}/800/400'
-        },
-        {
-            'name': 'Laundry Facility',
-            'description': 'Self-service laundry room with washing machines and dryers.',
-            'location': 'Basement, Block C',
-            'availability': '6:00 AM - 10:00 PM',
-            'image_url': f'https://picsum.photos/seed/laundry{4}/800/400'
-        },
-        {
-            'name': 'Cafeteria',
-            'description': 'Modern dining area serving fresh, nutritious meals throughout the day.',
-            'location': 'Ground Floor, Block B',
-            'availability': '7:00 AM - 10:00 PM',
-            'image_url': f'https://picsum.photos/seed/cafe{5}/800/400'
-        }
-    ]
-    
-    for facility_data in sample_facilities:
-        facility = Facility.query.filter_by(name=facility_data['name']).first()
-        if not facility:
-            facility = Facility(**facility_data)
-            db.session.add(facility)
-    
-    db.session.commit()
-
-def insert_sample_achievements():
-    sample_achievements = [
-        {
-            'title': 'Best Hostel Award',
-            'description': 'Recognized as the best-maintained hostel among all university hostels.',
-            'year': '2023',
-            'category': 'Infrastructure',
-            'image_url': f'https://picsum.photos/seed/award{1}/800/400'
-        },
-        {
-            'title': 'Sports Championship',
-            'description': 'Won the inter-hostel sports championship for three consecutive years.',
-            'year': '2023',
-            'category': 'Sports',
-            'image_url': f'https://picsum.photos/seed/sports{2}/800/400'
-        },
-        {
-            'title': 'Green Campus Initiative',
-            'description': 'Implemented successful waste management and solar energy systems.',
-            'year': '2022',
-            'category': 'Environment',
-            'image_url': f'https://picsum.photos/seed/green{3}/800/400'
-        },
-        {
-            'title': 'Cultural Excellence',
-            'description': 'First place in the annual cultural fest competitions.',
-            'year': '2023',
-            'category': 'Culture',
-            'image_url': f'https://picsum.photos/seed/culture{4}/800/400'
-        }
-    ]
-    
-    for achievement_data in sample_achievements:
-        achievement = Achievement.query.filter_by(title=achievement_data['title']).first()
-        if not achievement:
-            achievement = Achievement(**achievement_data)
-            db.session.add(achievement)
-    
-    db.session.commit()
-
-def insert_sample_notices():
-    sample_notices = [
-        {
-            'message': 'Maintenance work scheduled for Block A on Sunday',
-            'priority': 'Normal'
-        },
-        {
-            'message': 'Upcoming hostel meeting on Friday at 6 PM',
-            'priority': 'Important'
-        },
-        {
-            'message': 'Water supply interruption today from 2-4 PM',
-            'priority': 'Urgent'
-        }
-    ]
-    
-    for notice_data in sample_notices:
-        # Check if the notice already exists
-        existing_notice = Notice.query.filter_by(message=notice_data['message']).first()
-        if not existing_notice:
-            notice = Notice(**notice_data)
-            db.session.add(notice)
-    db.session.commit()
-
-def insert_sample_alumni():
-    sample_alumni = [
-        {
-            'name': 'John Smith',
-            'batch_year': '2020',
-            'current_position': 'Software Engineer',
-            'company': 'Google',
-            'linkedin': 'https://linkedin.com/in/johnsmith',
-            'email': 'john.smith@gmail.com',
-            'achievements': 'Led multiple successful projects, Patents in AI',
-            'image_url': f'https://picsum.photos/seed/alumni1/400/400'
-        },
-        {
-            'name': 'Jane Doe',
-            'batch_year': '2019',
-            'current_position': 'Data Scientist',
-            'company': 'Facebook',
-            'linkedin': 'https://linkedin.com/in/janedoe',
-            'email': 'jane.doe@gmail.com',
-            'achievements': 'Published research papers, Developed popular open-source tools',
-            'image_url': f'https://picsum.photos/seed/alumni2/400/400'
-        },
-        {
-            'name': 'Emily Johnson',
-            'batch_year': '2021',
-            'current_position': 'Product Manager',
-            'company': 'Amazon',
-            'linkedin': 'https://linkedin.com/in/emilyjohnson',
-            'email': 'emily.johnson@gmail.com',
-            'achievements': 'Launched successful products, Expert in Agile methodology',
-            'image_url': f'https://picsum.photos/seed/alumni3/400/400'
-        },
-        {
-            'name': 'Michael Brown',
-            'batch_year': '2022',
-            'current_position': 'UX Designer',
-            'company': 'Apple',
-            'linkedin': 'https://linkedin.com/in/michaelbrown',
-            'email': 'michael.brown@gmail.com',
-            'achievements': 'Redesigned major app interfaces, Advocate for user-centered design',
-            'image_url': f'https://picsum.photos/seed/alumni4/400/400'
-        }
-    ]
-    
-    for alumni_data in sample_alumni:
-        alumni = Alumni.query.filter_by(name=alumni_data['name']).first()
-        if not alumni:
-            alumni = Alumni(**alumni_data)
-            db.session.add(alumni)
-    db.session.commit()
-
 # --- Flask-Login User Loader ---
 @login_manager.user_loader
 def load_user(user_id):
@@ -661,6 +499,25 @@ def add_event():
         return redirect(url_for('events'))
     return render_template('add_event.html', title='Add Event', form=form)
 
+@app.route('/admin/facility/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_facility():
+    form = FacilityForm()
+    if form.validate_on_submit():
+        facility = Facility(
+            name=form.name.data,
+            description=form.description.data,
+            location=form.location.data,
+            availability=form.availability.data,
+            image_url=form.image_url.data
+        )
+        db.session.add(facility)
+        db.session.commit()
+        flash('Facility has been added!', 'success')
+        return redirect(url_for('facilities'))
+    return render_template('add_facility.html', title='Add Facility', form=form)
+
 @app.route('/admin/event/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -790,14 +647,20 @@ def update_complaint_comment(id):
     flash('Comment has been updated!', 'success')
     return redirect(url_for('admin_complaints'))
 
+@app.route('/admin/facility/delete/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_facility(id):
+    facility = Facility.query.get_or_404(id)
+    db.session.delete(facility)
+    db.session.commit()
+    flash('Facility has been deleted!', 'success')
+    return redirect(url_for('facilities'))
+
 # --- (All HTML Template strings have been removed from this file) ---
 
 # --- Main Execution ---
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        insert_sample_facilities()
-        insert_sample_achievements()
-        insert_sample_notices()
-        insert_sample_alumni()
     app.run(debug=True)
