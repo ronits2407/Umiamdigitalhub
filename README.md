@@ -1,4 +1,4 @@
-# Tech Bull Hostel Management System 🏢
+# Umiam Hostel Management System 🏢
 
 Welcome to the Tech Bull Hostel Management System! This application is designed to streamline hostel operations, enhance communication, and provide a better living experience for students.
 
