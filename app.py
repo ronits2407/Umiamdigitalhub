@@ -1,6 +1,6 @@
 # app.py
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 # IMPORTANT: We now import render_template, not render_template_string
 from flask import Flask, render_template, redirect, url_for, flash, request
@@ -360,6 +360,10 @@ def submit_complaint():
             complainant=current_user if form.anonymous.data == 'no' else None,
             anonymous=form.anonymous.data
         )
+        # Adjust time to IST (+5:30)
+        if complaint.submission_date is None:
+            complaint.submission_date = datetime.utcnow()
+        complaint.submission_date = complaint.submission_date + timedelta(hours=5, minutes=30)
         db.session.add(complaint)
         db.session.commit()
         flash('Your complaint has been submitted successfully!', 'success')
@@ -465,6 +469,10 @@ def add_announcement():
     form = AnnouncementForm()
     if form.add.data and form.validate():
         announcement = Announcement(title=form.title.data, content=form.content.data, author=current_user)
+        # Adjust time to IST (+5:30)
+        if announcement.date_posted is None:
+            announcement.date_posted = datetime.utcnow()  # Initialize if None
+        announcement.date_posted = announcement.date_posted + timedelta(hours=5, minutes=30)
         db.session.add(announcement)
         db.session.commit()
         flash('Announcement has been added!', 'success')
@@ -591,6 +599,8 @@ def profile_settings():
 @admin_required
 def delete_event(id):
     event = Event.query.get_or_404(id)
+    # Delete associated registrations
+    EventRegistration.query.filter_by(event_id=event.id).delete()
     db.session.delete(event)
     db.session.commit()
     flash('Event has been deleted!', 'success')
