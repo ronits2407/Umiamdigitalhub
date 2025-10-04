@@ -258,6 +258,17 @@ class AdminEditProfileForm(FlaskForm):
     role = SelectField('Role', choices=[('Student', 'Student'), ('HMC Admin', 'HMC Admin')], validators=[DataRequired()])
     submit = SubmitField('Update Profile')
 
+class AlumniForm(FlaskForm):
+    name = StringField('Full Name', validators=[DataRequired()])
+    batch_year = StringField('Batch Year', validators=[DataRequired()])
+    current_position = StringField('Current Position', validators=[DataRequired()])
+    company = StringField('Company')
+    linkedin = StringField('LinkedIn Profile URL')
+    email = StringField('Email', validators=[Optional(), Email()])
+    achievements = TextAreaField('Achievements')
+    image_url = StringField('Profile Image URL')
+    submit = SubmitField('Save Alumni')
+
 # --- Routes (MODIFIED to use render_template) ---
 @app.route('/')
 @app.route('/home')
@@ -683,6 +694,58 @@ def delete_achievement(id):
     db.session.commit()
     flash('Achievement has been deleted!', 'success')
     return redirect(url_for('achievements'))
+
+@app.route('/admin/alumni/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_alumni():
+    form = AlumniForm()
+    if form.validate_on_submit():
+        alumni = Alumni(
+            name=form.name.data,
+            batch_year=form.batch_year.data,
+            current_position=form.current_position.data,
+            company=form.company.data,
+            linkedin=form.linkedin.data,
+            email=form.email.data,
+            achievements=form.achievements.data,
+            image_url=form.image_url.data
+        )
+        db.session.add(alumni)
+        db.session.commit()
+        flash('Alumni has been added successfully!', 'success')
+        return redirect(url_for('alumni'))
+    return render_template('add_alumni.html', title='Add Alumni', form=form)
+
+@app.route('/admin/alumni/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_alumni(id):
+    alumni = Alumni.query.get_or_404(id)
+    form = AlumniForm(obj=alumni)
+    if form.validate_on_submit():
+        alumni.name = form.name.data
+        alumni.batch_year = form.batch_year.data
+        alumni.current_position = form.current_position.data
+        alumni.company = form.company.data
+        alumni.linkedin = form.linkedin.data
+        alumni.email = form.email.data
+        alumni.achievements = form.achievements.data
+        alumni.image_url = form.image_url.data
+        db.session.commit()
+        flash('Alumni information has been updated!', 'success')
+        return redirect(url_for('alumni'))
+    return render_template('add_alumni.html', title='Edit Alumni', form=form, alumni=alumni)
+
+@app.route('/admin/alumni/delete/<int:id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_alumni(id):
+    alumni = Alumni.query.get_or_404(id)
+    db.session.delete(alumni)
+    db.session.commit()
+    flash('Alumni has been deleted!', 'success')
+    return redirect(url_for('alumni'))
 
 # --- (All HTML Template strings have been removed from this file) ---
 
