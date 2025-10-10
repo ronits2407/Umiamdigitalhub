@@ -152,7 +152,7 @@ class RegistrationForm(FlaskForm):
         ('ME', 'Mechanical'),
         ('CE', 'Civil')
     ], validators=[DataRequired()])
-    verification_code = StringField('Verification Code (try:- "UMIAM-HMC"', validators=[Optional()])
+    verification_code = StringField('Verification Code (try:- "UMIAM-HMC)"', validators=[Optional()])
     role = SelectField('Role', choices=[('Student', 'Student'), ('HMC Admin', 'HMC Admin')], validators=[DataRequired()])
     submit = SubmitField('Sign Up')
 
