@@ -22,8 +22,10 @@
                             </div>
                             <div class="col-md-6">
                                 {{ form.email.label(class="form-label") }}
-                                {{ form.email(class="form-control") }}
+                                {{ form.email(class="form-control", pattern="^[a-zA-Z0-9._%+-]+@iitg\.ac\.in$", title="Please use your IITG email address") }}
+                            <small class="text-muted">Use your official IITG email (e.g., user@iitg.ac.in)</small>
                             </div>
+
                         </div>
 
                         <!-- Academic Information -->

@@ -49,6 +49,10 @@ class User(UserMixin, db.Model):
     profile_pic_url = db.Column(db.Text)
     # ...existing relationships...
 
+class UmiamStudent(db.Model):
+    __tablename__ = 'umiam_students'
+    email = db.Column(db.String(120), primary_key=True)
+
 class Announcement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
@@ -76,6 +80,15 @@ class Facility(db.Model):
     availability = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+class AddStudentForm(FlaskForm):
+    email = StringField('Student Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Add Student')
+
+    def validate_email(self, email):
+        student = UmiamStudent.query.filter_by(email=email.data.strip().lower()).first()
+        if student:
+            raise ValidationError('This email is already in the UMIAM student database.')
 
 class Achievement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -162,6 +175,12 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
             raise ValidationError('That email is already in use.')
+        if not email.data.lower().endswith('@iitg.ac.in'):
+            raise ValidationError('Please use your official IITG email address.')
+        email_data = email.data.strip().lower()
+        student = UmiamStudent.query.filter_by(email=email_data).first()
+        if not student:
+            raise ValidationError('You are not am UMIAM resident, please contact an HMC member if you think this is an error. ')
     def validate_verification_code(self, field):
         if self.role.data == 'HMC Admin' and field.data != 'UMIAM-HMC':
             raise ValidationError('Invalid verification code.')
@@ -517,6 +536,22 @@ def add_event():
         flash('Event has been added!', 'success')
         return redirect(url_for('events'))
     return render_template('add_event.html', title='Add Event', form=form)
+
+@app.route('/admin/students/add', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_student():
+    form = AddStudentForm()
+    if form.validate_on_submit():
+        new_student = UmiamStudent(
+            email=form.email.data.strip().lower()
+        )
+        db.session.add(new_student)
+        db.session.commit()
+        flash('Student email added successfully to the UMIAM database.', 'success')
+        return redirect(url_for('add_student'))  # or redirect to admin dashboard
+    return render_template('add_student.html', title='Add Student', form=form)
+
 
 @app.route('/admin/facility/add', methods=['GET', 'POST'])
 @login_required

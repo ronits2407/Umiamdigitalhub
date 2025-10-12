@@ -4,13 +4,17 @@
 {% block content %}
 <div class="container-md py-4">
     <div class="dashboard-header mb-4">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
                 <h1 class="display-4 text-white mb-2"><i class="fas fa-users-cog me-2"></i>Manage Users</h1>
                 <p class="lead text-white-50 mb-0">View and manage user accounts</p>
             </div>
+            <a href="{{ url_for('add_student') }}" class="btn btn-light">
+                <i class="fas fa-plus me-2"></i>Add a student email
+            </a>
         </div>
     </div>
+
 
     <div class="card">
         <div class="card-body">
@@ -70,5 +74,20 @@
         box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         border-radius: 10px;
     }
+    /* Button Styling to match Submit Complaint */
+    .btn-light {
+        background: rgba(255, 255, 255, 0.1); /* translucent white */
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }   
+
 </style>
 {% endblock %}
