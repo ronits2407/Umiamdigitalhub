@@ -16,14 +16,14 @@
                         <!-- Basic Information -->
                         <h5 class="mb-3">Basic Information</h5>
                         <div class="row mb-4">
-                            <div class="col-md-6">
+                            <div class="col-md-6">  
                                 {{ form.username.label(class="form-label") }}
                                 {{ form.username(class="form-control") }}
                             </div>
                             <div class="col-md-6">
                                 {{ form.email.label(class="form-label") }}
                                 {{ form.email(class="form-control", pattern="^[a-zA-Z0-9._%+-]+@iitg\.ac\.in$", title="Please use your IITG email address(e.g example@iitg.ac.in)") }}
-                            <small class="text-muted">Use your official IITG email (e.g., user@iitg.ac.in)</small>
+                            <small class="text-muted">Use your official IITG email (e.g., example@iitg.ac.in)</small>
                             </div>
 
                         </div>
