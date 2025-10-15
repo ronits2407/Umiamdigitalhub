@@ -99,8 +99,15 @@ This system is structured around four key areas:
 3.  Set up the database.
 4.  Run the Flask application using `python app.py`.
 5.  For testing purposes the following is the list of emails ( analogous to list of emails of umiam residents):-
-    user@iitg.ac.in
-    example@iitg.ac.in
+
+    **example@iitg.ac.in**
+    **k.sonawane@iitg.ac.in**
+    **s.kalaria@iitg.ac.in**
+    **p.soham@iitg.ac.in**
+    **s.misro@iitg.ac.in**
+    **rahul@iitg.ac.in**
+    **krishiv@iitg.ac.in**
+    **example@iitg.ac.in**
 
 ## Contributing 🤝
 
