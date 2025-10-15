@@ -98,6 +98,9 @@ This system is structured around four key areas:
 2.  Install the required Python packages using `pip install -r requirements.txt`.
 3.  Set up the database.
 4.  Run the Flask application using `python app.py`.
+5.  For testing purposes the following is the list of emails ( analogous to list of emails of umiam residents):-
+    user@iitg.ac.in
+    example@iitg.ac.in
 
 ## Contributing 🤝
 
