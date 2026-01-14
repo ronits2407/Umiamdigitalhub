@@ -14,7 +14,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 # --- App and DB Configuration ---
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'a-very-secret-key-that-you-should-change'
+app.config['SECRET_KEY'] = 'lalalala'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
